@@ -28,7 +28,7 @@ const Layout = () => {
   return (
     <div className="main w-[100vw] h-[100vh] relative ]">
       <div className="fixed w-full flex justify-between items-center px-3 py-1.5 bg-white/40 z-[9999]">
-        <div className="name font-medium text-xl">
+        <div className="name font-bold text-xl">
           Hi {user?.name?.split(" ")[0]}!
         </div>
         <Popover>
@@ -56,7 +56,7 @@ const Layout = () => {
                   setIsAuthenticated(false);
                   setUser(null);
                 }}
-                className="logout mt-2 px-2 py-0.5 text-sm w-full bg-red-100 rounded-md hover:bg-red-200 text-gray-500"
+                className="logout mt-2 px-2 py-0.5 text-sm w-full bg-red-100 rounded-md hover:bg-red-500 text-gray-500 hover:text-white"
               >
                 Logout
               </button>

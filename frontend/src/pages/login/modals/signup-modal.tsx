@@ -213,6 +213,7 @@ const SignupModal = () => {
         <Button
           variant="default"
           className="mt-2"
+          type="button"
           onClick={() => formik.handleSubmit()}
         >
           {loading ? (
