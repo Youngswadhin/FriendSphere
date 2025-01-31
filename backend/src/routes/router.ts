@@ -57,6 +57,6 @@ router.use('/search', searchRouter)
 router.use('/suggest', suggestRouter)
 router.use('/friend', friendRouter)
 
-router.use('/api-docs', serve, setup(swaggerSpec))
+// router.use('/api-docs', serve, setup(swaggerSpec))
 
 export default router
