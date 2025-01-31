@@ -6,8 +6,21 @@
 This API provides user authentication functionalities including Sign-Up, Login, JWT-based authentication, and user location-based suggestions.
 
 ---
+## 📱 **App Preview**  
+Here are some screenshots of the app in action:
+
+### **Home Page**
+![Home Page](frontend/public/home.png)
+
+### **Sign-Up Page**
+![Sign-Up Page](frontend/public/sign.png)
+
+### **User Suggestions**
+![User Suggestions](frontend/public/suggest.png)
+
 
 ## 🚀 **Getting Started**  
+
 
 ### **1️⃣ Sign-Up & Login**  
 If you're unable to sign up, you can use the following test credentials:  
@@ -58,5 +71,8 @@ If you're unable to sign up, you can use the following test credentials:
 
 ---
 
+
+
+---
 
 
