@@ -274,10 +274,12 @@ const Home = () => {
               </AccordionTrigger>
               <AccordionContent className="p-0">
                 {user?.friends?.length ?? 0 > 0 ? (
-                  user?.friends?.map((friend) => (
+                  user?.friends?.map(({friend}) => (
                     <div className="flex justify-between items-center w-full px-4 py-2">
                       <div className="flex items-center gap-2">
-                        <div className="img w-[40px] h-[40px] bg-gray-700 rounded-full"></div>
+                        <div className="img w-[40px] h-[40px] bg-gray-400 items-center border border-gray-600 text-lg justify-center flex rounded-full">
+                          {friend.name?.split(" ").slice(0,2).reduce((p,c)=>p+c[0],"")}
+                        </div>
                         <div className="name">{friend.name}</div>
                       </div>
                       <button

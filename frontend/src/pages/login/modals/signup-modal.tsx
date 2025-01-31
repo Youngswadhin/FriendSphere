@@ -16,7 +16,24 @@ const SignupModal = () => {
   const modalRef = useRef<ModalRef>(null);
   const [loading, setLoading] = useState(false);
 
-  const formik = useFormik({
+  const formik = useFormik<{
+    email: string;
+    password: string;
+    name: string;
+    age: string;
+    address: {
+      city: string;
+      zip: string;
+      country: string;
+      state: string;
+      location: {
+        lat: string;
+        long: string;
+      };
+    };
+    hobbies: { value: string; label: string }[];
+    image: string;
+  }>({
     initialValues: {
       email: "",
       password: "",
@@ -44,7 +61,19 @@ const SignupModal = () => {
       apiRequest<{ user: User }>({
         url: "/auth/sign-up",
         method: "POST",
-        body: values,
+        body: {
+          ...values,
+          age: Number(values.age),
+          address: {
+            ...values.address,
+            location: {
+              lat: Number(values.address.location.lat),
+              long: Number(values.address.location.long),
+            },
+          },
+          hobbies: values.hobbies.map((hobby) => hobby.value),
+          image: "",
+        },
       })
         .then((res) => {
           if (res.status === 200) {

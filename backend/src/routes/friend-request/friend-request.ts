@@ -54,6 +54,7 @@ const friendRequestRouter = Router()
 friendRequestRouter.post('/create', async (req, res) => {
   const { userId } = req.user
   const { friendId } = req.body
+  console.log(`Creating friend request from user ${userId} to user ${friendId}`)
 
   try {
     const friendRequest = await prisma.friendRequest.create({
@@ -63,8 +64,10 @@ friendRequestRouter.post('/create', async (req, res) => {
         status: 'PENDING',
       },
     })
+    console.log(`Friend request created: ${JSON.stringify(friendRequest)}`)
     res.status(201).json(friendRequest)
   } catch (error) {
+    console.error(`Error creating friend request: ${error.message}`)
     res.status(500).json({ error: 'Failed to create friend request' })
   }
 })
@@ -143,6 +146,7 @@ friendRequestRouter.get('/get', async (req, res) => {
  */
 friendRequestRouter.put('/accept', async (req, res) => {
   const { id } = req.body
+  console.log(`Accepting friend request with ID: ${id}`)
 
   try {
     const friendRequest = await prisma.friendRequest.update({
@@ -154,21 +158,49 @@ friendRequestRouter.put('/accept', async (req, res) => {
         status: 'ACCEPTED',
       },
     })
+    console.log(`Friend request accepted: ${JSON.stringify(friendRequest)}`)
 
-    if (friendRequest) {
-      const job = new CronJob('0 */2 * * *', async () => {
-        await prisma.friendRequest.deleteMany({
-          where: {
-            id,
-          },
-        })
-        job.stop()
+    const user = await prisma.userOnUser.create({
+      data: {
+        userId: friendRequest.senderId,
+        friendId: friendRequest.receiverId,
+      },
+    })
+    console.log(`User relationship created: ${JSON.stringify(user)}`)
+
+    const friend = await prisma.userOnUser.create({
+      data: {
+        userId: friendRequest.receiverId,
+        friendId: friendRequest.senderId,
+      },
+    })
+    console.log(`Friend relationship created: ${JSON.stringify(friend)}`)
+
+    if (!user || !friend) {
+      await prisma.friendRequest.update({
+        where: { id },
+        data: { status: 'PENDING' },
       })
-      job.start()
+      console.error('Failed to create user or friend relationship')
+      return res.status(500).json({ error: 'Failed to accept friend request' })
     }
+
+    const job = new CronJob('0 */2 * * *', async () => {
+      await prisma.friendRequest.deleteMany({
+        where: { id },
+      })
+      console.log(`Deleted friend request with ID: ${id}`)
+      job.stop()
+    })
+    job.start()
 
     res.status(200).json({ message: 'Friend request accepted' })
   } catch (error) {
+    console.error(`Error accepting friend request: ${error.message}`)
+    await prisma.friendRequest.update({
+      where: { id },
+      data: { status: 'PENDING' },
+    })
     res.status(500).json({ error: 'Failed to accept friend request' })
   }
 })

@@ -39,7 +39,7 @@ export interface User {
   address?: Address;
   image?: string;
   hobbies: string[];
-  friends: User[];
+  friends: {friend:User}[];
   friendOf: User[];
   sentRequests: FriendRequest[];
   receivedRequests: FriendRequest[];
